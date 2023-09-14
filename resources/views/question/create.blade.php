@@ -6,7 +6,8 @@
     </x-slot>
 
 
-    <form action="{{ route('uploadQuestions') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('question.store') }}" method="POST" enctype="multipart/form-data" class="bg-gray-100 ">
+        {{-- //TODO: Add selection for topic --}}
         @csrf
         <input type="file" name="question_file">
         <button type="submit">Upload File</button>

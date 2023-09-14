@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Answer;
+use App\Models\Question;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use League\Csv\Reader;
 
 class QuestionController extends Controller
 {
@@ -19,7 +23,7 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        //
+        return view('question.create');
     }
 
     /**
@@ -27,7 +31,52 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // TODO: Fix fileupload validation to check for correct filetype
+        $request->validate([
+            'question_file' => 'required|file',
+            // |mimetypes:text/csv,application/json
+            // mimes:json,csv
+        ]);
+
+        $file = $request->file('question_file');
+
+        // Open the CSV file
+        $csv = Reader::createFromPath($file->getPathname(), 'r');
+        $csv->setDelimiter(';'); // Specify the semicolon as the delimiter
+        $csv->setHeaderOffset(0); // Assuming the first row contains column headers
+
+        // Iterate through the CSV rows and insert/update questions and answers
+        foreach ($csv as $row) {
+
+            $question = Question::updateOrCreate([
+                'id' => $row['id'],
+                'topic_id' => 1,
+                'text' => $row['question'],
+                'type' => "multipleChoice",
+            ]);
+
+            Answer::updateOrCreate([
+                'id' => Str::uuid(),
+                'question_id' => $question->id,
+                'text' => $row['answer_a'],
+                'isCorrect' => ($row['correct_answer'] == 'a' || $row['correct_answer'] == 'A') ? true : false,
+            ]);
+            Answer::updateOrCreate([
+                'id' => Str::uuid(),
+                'question_id' => $question->id,
+                'text' => $row['answer_b'],
+                'isCorrect' => ($row['correct_answer'] == 'b' || $row['correct_answer'] == 'B') ? true : false,
+            ]);
+            Answer::updateOrCreate([
+                'id' => Str::uuid(),
+                'question_id' => $question->id,
+                'text' => $row['answer_c'],
+                'isCorrect' => ($row['correct_answer'] == 'c' || $row['correct_answer'] == 'C') ? true : false,
+            ]);
+        }
+
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Questions uploaded successfully');
     }
 
     /**

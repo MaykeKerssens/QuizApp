@@ -9,6 +9,8 @@ class Topic extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name'];
+
     public function topicProgress()
     {
         return $this->hasMany(TopicProgress::class);

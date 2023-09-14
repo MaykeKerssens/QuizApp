@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('topic_id')->references('id')->on('topics');
             $table->string('text');
-            $table->text('type');
+            $table->string('type');
             $table->string('hint')->nullable();
             $table->string('correct_answer')->nullable();
-            $table->integer('point_worth');
+            $table->integer('point_worth')->default(1);
             $table->timestamps();
         });
     }

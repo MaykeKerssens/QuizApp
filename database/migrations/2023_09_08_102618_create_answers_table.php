@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('answers', function (Blueprint $table) {
-            $table->id();
-            $table->string('text');
+            $table->uuid('id')->primary();
+            $table->foreignId('question_id')->references('id')->on('questions');
+            $table->text('text');
             $table->boolean('isCorrect');
             $table->timestamps();
         });
