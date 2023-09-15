@@ -14,14 +14,21 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         {{-- @inertiaHead --}}
+
+        <!-- Makes page unscrollable -->
+        <style>
+            html, body {
+              overflow: hidden;
+            }
+        </style>
     </head>
     <body class="font-sans antialiased">
         {{-- @inertia --}}
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div class="min-h-screen bg-purple-800">
             @include('components.header')
 
             <!-- Page Content -->
-            <main>
+            <main class="place-content-center">
                 {{ $slot }}
             </main>
         </div>
