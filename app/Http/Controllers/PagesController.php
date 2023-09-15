@@ -14,4 +14,15 @@ class PagesController extends Controller
             'topics' => $topics
         ]);
     }
+
+        /**
+     * Display the specified resource.
+     */
+    public function quiz(string $id)
+    {
+        $topic = Topic::find($id);
+        return view('quiz',[
+            'topic' => $topic
+        ]);
+    }
 }
