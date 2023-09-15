@@ -59,19 +59,19 @@ class QuestionController extends Controller
                 'id' => Str::uuid(),
                 'question_id' => $question->id,
                 'text' => $row['answer_a'],
-                'isCorrect' => ($row['correct_answer'] == 'a' || $row['correct_answer'] == 'A') ? true : false,
+                'isCorrect' => ($row['correct_answer'] == 'a' || $row['correct_answer'] == 'A'),
             ]);
             Answer::updateOrCreate([
                 'id' => Str::uuid(),
                 'question_id' => $question->id,
                 'text' => $row['answer_b'],
-                'isCorrect' => ($row['correct_answer'] == 'b' || $row['correct_answer'] == 'B') ? true : false,
+                'isCorrect' => ($row['correct_answer'] == 'b' || $row['correct_answer'] == 'B'),
             ]);
             Answer::updateOrCreate([
                 'id' => Str::uuid(),
                 'question_id' => $question->id,
                 'text' => $row['answer_c'],
-                'isCorrect' => ($row['correct_answer'] == 'c' || $row['correct_answer'] == 'C') ? true : false,
+                'isCorrect' => ($row['correct_answer'] == 'c' || $row['correct_answer'] == 'C'),
             ]);
         }
 
