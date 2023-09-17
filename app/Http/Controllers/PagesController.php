@@ -23,9 +23,7 @@ class PagesController extends Controller
     public function quiz(string $id)
     {
         $topic = Topic::find($id);
-
         $questions = Question::where('topic_id', $id)->orderBy('id','ASC')->get();
-
         $question = $questions[0];
         $answers = Answer::where('question_id', $question->id)->orderBy('id','ASC')->get();
 
@@ -33,14 +31,29 @@ class PagesController extends Controller
             'topic' => $topic,
             'question' => $question,
             'answers' => $answers,
+            'counter' => 0,
         ]);
     }
 
-    public function storeUserAnswer(string $question_id)
+    public function storeUserAnswer(Request $request)
     {
-        // for($i = 0; $i <= count($questions);){
+
+        // save answer here:
 
 
-        // }
+
+        // Go to next question
+        $counter = $request->counter + 1;
+        $topic = Topic::find($request->topic_id);
+        $questions = Question::where('topic_id', $topic->id)->orderBy('id','ASC')->get();
+        $question = $questions[$counter];
+        $answers = Answer::where('question_id', $question->id)->orderBy('id','ASC')->get();
+
+        return view('quiz',[
+            'topic' => $topic,
+            'question' => $question,
+            'answers' => $answers,
+            'counter' => $counter,
+        ]);
     }
 }
