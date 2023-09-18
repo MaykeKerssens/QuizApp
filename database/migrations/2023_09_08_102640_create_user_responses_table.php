@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users');
             $table->foreignId('question_id')->references('id')->on('questions');
+            $table->foreignId('answer_id')->nullable()->references('id')->on('answers');
             $table->string('response');
             $table->boolean('isCorrect');
             $table->timestamps();
