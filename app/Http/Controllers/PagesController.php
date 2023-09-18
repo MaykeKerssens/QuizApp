@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Answer;
 use App\Models\Question;
 use App\Models\Topic;
+use App\Models\UserResponse;
 use Illuminate\Http\Request;
 
 class PagesController extends Controller
@@ -37,21 +38,27 @@ class PagesController extends Controller
 
     public function storeUserAnswer(Request $request)
     {
+        $currentQuestion = Question::find($request->question_id);
+        $selectedAnswer = Answer::where('id', $request->selected_answer_id)->get()[0];
 
         // save answer here:
-
-
+        UserResponse::updateOrCreate([
+            'user_id' => auth()->user()->id,
+            'question_id' => $currentQuestion->id,
+            'answer_id' => ($currentQuestion->type == 'multipleChoice') ? $selectedAnswer->id : null,
+            'response' => ($currentQuestion->type == 'openAnswer') ? $request->response : null,
+            'isCorrect' => ($selectedAnswer->isCorrect == true),
+        ]);
 
         // Go to next question
+        // TODO: check if there are more questions, otherwise end quiz
         $counter = $request->counter + 1;
-        $topic = Topic::find($request->topic_id);
-        $questions = Question::where('topic_id', $topic->id)->orderBy('id','ASC')->get();
-        $question = $questions[$counter];
-        $answers = Answer::where('question_id', $question->id)->orderBy('id','ASC')->get();
+        $questions = Question::where('topic_id', $currentQuestion->topic_id)->orderBy('id','ASC')->get();
+        $newQuestion = $questions[$counter];
+        $answers = Answer::where('question_id', $currentQuestion->id)->orderBy('id','ASC')->get();
 
         return view('quiz',[
-            'topic' => $topic,
-            'question' => $question,
+            'question' => $newQuestion,
             'answers' => $answers,
             'counter' => $counter,
         ]);
