@@ -27,12 +27,15 @@ class PagesController extends Controller
         $questions = Question::where('topic_id', $id)->orderBy('id','ASC')->get();
         $question = $questions[0];
         $answers = Answer::where('question_id', $question->id)->orderBy('id','ASC')->get();
+        $questionsAmount = count($questions);
 
         return view('quiz',[
             'topic' => $topic,
             'question' => $question,
             'answers' => $answers,
+            'questionsAmount' => $questionsAmount,
             'counter' => 0,
+
         ]);
     }
 
@@ -51,16 +54,29 @@ class PagesController extends Controller
         ]);
 
         // Go to next question
-        // TODO: check if there are more questions, otherwise end quiz
-        $counter = $request->counter + 1;
         $questions = Question::where('topic_id', $currentQuestion->topic_id)->orderBy('id','ASC')->get();
-        $newQuestion = $questions[$counter];
-        $answers = Answer::where('question_id', $currentQuestion->id)->orderBy('id','ASC')->get();
 
-        return view('quiz',[
-            'question' => $newQuestion,
-            'answers' => $answers,
-            'counter' => $counter,
-        ]);
+        // check if there are more questions, otherwise end quiz
+        if($request->counter < ($request->questionsAmount -1)){
+            $counter =  $request->counter + 1;
+            $newQuestion = $questions[$counter];
+            $answers = Answer::where('question_id', $newQuestion->id)->orderBy('id','ASC')->get();
+
+            return view('quiz',[
+                'question' => $newQuestion,
+                'answers' => $answers,
+                'questionsAmount' => $request->questionsAmount,
+                'counter' => $counter,
+            ]);
+        }
+        else{
+            dd('einde quiz');
+            // return view('quiz',[
+            //     'question' => $newQuestion,
+            //     'answers' => $answers,
+            //     'questionsAmount' => $request->questionsAmount,
+            //     'counter' => $counter,
+            // ]);
+        }
     }
 }

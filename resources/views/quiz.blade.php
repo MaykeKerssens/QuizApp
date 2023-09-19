@@ -3,7 +3,7 @@
     <div class="pt-6 mx-6 min-h-screen flex flex-col">
         <div class="text-gray-100 text-3xl mb-6 border-b border-gray-100 flex justify-between">
             <h2 class="">{{ $question->topic->name }}:</h2>
-            <h2 class="text-lg">{{ $counter + 1 }}/10</h2>
+            <h2 class="text-lg">{{ $counter + 1 }}/{{ $questionsAmount }}</h2>
         </div>
 
 
@@ -55,6 +55,7 @@
             @endif
 
             <input type="hidden" name="question_id" value="{{ $question->id }}">
+            <input type="hidden" name="questionsAmount" value="{{ $questionsAmount }}">
             <input type="hidden" name="counter" value="{{ $counter }}">
 
             <x-primary-button>Submit</x-primary-button>
