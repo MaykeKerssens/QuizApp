@@ -24,11 +24,14 @@
     </head>
     <body class="font-sans antialiased">
         {{-- @inertia --}}
-        <div class="min-h-screen bg-purple-800">
-            @include('components.header')
+        <div class="h-screen bg-purple-800 flex flex-col">
+            <div class="">
+
+                @include('components.header')
+            </div>
 
             <!-- Page Content -->
-            <main class="place-content-center">
+            <main class="flex-1">
                 {{ $slot }}
             </main>
         </div>

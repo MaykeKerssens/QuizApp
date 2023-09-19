@@ -5,8 +5,12 @@
 
         <div class="space-y-4">
             @foreach ($topics as $topic)
-                <x-secondary-button>{{ $topic->name }}</x-secondary-button>
+            {{-- //TODO: figure out how to send quesiton id with route --}}
+                <x-secondary-button>
+                    <a href="{{ route('quiz',$topic->id) }}">{{ $topic->name }}</a>
+                </x-secondary-button>
             @endforeach
+        </div>
     </div>
 
 

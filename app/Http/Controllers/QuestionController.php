@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Answer;
 use App\Models\Question;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use League\Csv\Reader;
 
 class QuestionController extends Controller
@@ -56,19 +55,16 @@ class QuestionController extends Controller
             ]);
 
             Answer::updateOrCreate([
-                'id' => Str::uuid(),
                 'question_id' => $question->id,
                 'text' => $row['answer_a'],
                 'isCorrect' => ($row['correct_answer'] == 'a' || $row['correct_answer'] == 'A'),
             ]);
             Answer::updateOrCreate([
-                'id' => Str::uuid(),
                 'question_id' => $question->id,
                 'text' => $row['answer_b'],
                 'isCorrect' => ($row['correct_answer'] == 'b' || $row['correct_answer'] == 'B'),
             ]);
             Answer::updateOrCreate([
-                'id' => Str::uuid(),
                 'question_id' => $question->id,
                 'text' => $row['answer_c'],
                 'isCorrect' => ($row['correct_answer'] == 'c' || $row['correct_answer'] == 'C'),
