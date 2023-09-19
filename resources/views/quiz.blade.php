@@ -4,14 +4,14 @@
         <form action="{{ route('saveAnswer') }}" class="flex flex-col justify-between h-full">
             @csrf
             <div> <!-- everything -->
-                <div class="text-gray-100 text-3xl mb-6 border-b border-gray-100 flex justify-between">
+                <div class="text-gray-100 text-3xl mb-4 border-b border-gray-100 flex justify-between">
                     <h2 class="">{{ $question->topic->name }}:</h2>
                     <h2 class="text-lg">{{ $counter + 1 }}/{{ $questionsAmount }}</h2>
                 </div>
 
-                <h2>{{ $counter + 1 }}. {{ $question->text }}</h2>
+                <h2 class="text-gray-100 text-lg">{{ $counter + 1 }}. {{ $question->text }}</h2>
 
-                <div class="min-h-full flex flex-col justify-between ">
+                <div class="min-h-full flex flex-col justify-between mt-6">
                     <div class="space-y-4">
                         @foreach ($answers as $answer)
                             <x-secondary-button class="answer-button" data-answer-id="{{ $answer->id }}">
@@ -57,7 +57,7 @@
             <input type="hidden" name="counter" value="{{ $counter }}">
 
             <div> <!-- submit button -->
-                <x-primary-button class="">Submit</x-primary-button>
+                <x-primary-button>Submit</x-primary-button>
             </div>
 
         </form>
