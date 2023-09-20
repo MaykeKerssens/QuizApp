@@ -11,9 +11,10 @@
                 </div>
             </div>
 
-            <div class="bg-gray-100 rounded-lg p-4 gap-y-2">
+            <div class="bg-gray-100 rounded-lg p-4 gap-y-2 max-h-96 overflow-y-auto">
                 <p class="text-purple-900 font-bold text-lg">Choose a topic:</p>
                 <select name="topic" id="topic">
+                    <option>Topics</option>
                     @foreach ($topics as $topic)
                         <option value="{{ $topic->name }}">{{ $topic->name }}</option>
                     @endforeach
@@ -21,38 +22,69 @@
 
                 <p class="text-purple-900 font-bold text-lg">Select a file with questions:</p>
                 <input type="file" name="question_file">
-            </div>
 
-            <div class="bg-gray-100 rounded-lg p-4 gap-y-2 mt-4">
+
+                <!-- Create questions -->
                 <p class="text-purple-900 font-bold text-lg">Enter question:</p>
                 <input type="text" name="question_text">
 
                 <p class="text-purple-900 font-bold text-lg">Set pointworth:</p>
                 <input type="number" name="question_point_worth">
 
+                <p class="text-purple-900 font-bold text-lg">Choose question type:</p>
+                <select name="question_type" id="question_type" onchange="toggleFields()">
+                    <option value="">Question types</option>
+                    <option value="multipleChoice">Multiple choice</option>
+                    <option value="openAnswer">Open answer</option>
+                </select>
 
-                <h2>/////// Multiple choice questions</h2>
-                <p class="text-purple-900 font-bold text-lg">Enter answer A:</p>
-                <input type="text" name="question_text">
-                <input type="checkbox">
-
-                <p class="text-purple-900 font-bold text-lg">Enter answer B:</p>
-                <input type="text" name="question_text">
-                <input type="checkbox">
-
-                <p class="text-purple-900 font-bold text-lg">Enter answer C:</p>
-                <input type="text" name="question_text">
-                <input type="checkbox">
+                {{-- //TODO: Add hint field? --}}
 
 
-                <h2>//////// Open Answer question</h2>
-                <p class="text-purple-900 font-bold text-lg">Enter correct answer:</p>
-                <input type="text" name="question_text">
+                <!-- Script for toggling MultipleChoice and OpenAnswer fields -->
+                <script>
+                    function toggleFields() {
+                        var selectedOption = document.getElementById('question_type').value;
+                        var multipleChoiceFields = document.getElementById('multipleChoiceFields');
+                        var openAnswerFields = document.getElementById('openAnswerFields');
 
-                {{-- //TODO: Add hints? --}}
+                        if (selectedOption === 'multipleChoice') {
+                            multipleChoiceFields.style.display = 'block';
+                            openAnswerFields.style.display = 'none';
+                        } else if (selectedOption === 'openAnswer') {
+                            multipleChoiceFields.style.display = 'none';
+                            openAnswerFields.style.display = 'block';
+                        } else {
+                            // Handle other cases if needed
+                            multipleChoiceFields.style.display = 'none';
+                            openAnswerFields.style.display = 'none';
+                        }
+                    }
+                </script>
+
+                <!-- Multiple choice questions -->
+                <div id="multipleChoiceFields" style="display: none">
+                    <p class="text-purple-900 font-bold text-lg">Enter answer A:</p>
+                    <input type="text" name="answer_a">
+                    <input type="checkbox" name="answer_a_isCorrect">
+
+                    <p class="text-purple-900 font-bold text-lg">Enter answer B:</p>
+                    <input type="text" name="answer_b">
+                    <input type="checkbox" name="answer_b_isCorrect">
+
+                    <p class="text-purple-900 font-bold text-lg">Enter answer C:</p>
+                    <input type="text" name="answer_c">
+                    <input type="checkbox" name="answer_c_isCorrect">
+                </div>
+
+                <!-- Open Answer question -->
+                <div id="openAnswerFields" style="display: none">
+                    <p class="text-purple-900 font-bold text-lg">Enter correct answer:</p>
+                    <input type="text" name="question_text">
+                </div>
+
             </div>
         </div>
-
 
 
         <div> <!-- submit button -->
