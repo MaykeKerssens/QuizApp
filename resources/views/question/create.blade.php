@@ -13,7 +13,7 @@
 
             <div class="bg-gray-100 rounded-lg p-4 gap-y-2 max-h-96 overflow-y-auto">
                 <p class="text-purple-900 font-bold text-lg">Choose a topic:</p>
-                <select name="topic" id="topic">
+                <select name="selected_topic" id="topic">
                     <option>Topics</option>
                     @foreach ($topics as $topic)
                         <option value="{{ $topic->name }}">{{ $topic->name }}</option>
@@ -89,6 +89,11 @@
         <div class="bg-gray-100 rounded-lg gap-y-2 px-6 py-2">
             <p class="text-purple-900 font-bold  text-lg">Feedback:</p>
             <p>{{ $errors }}</p>
+            @if(session('success'))
+                <div class="">
+                    {{ session('success') }}
+                </div>
+            @endif
             {{-- //TODO: Add feedback after adding questions --}}
         </div>
 
