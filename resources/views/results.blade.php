@@ -1,5 +1,4 @@
 <x-app-layout>
-
     <div class="pt-6 mx-6 flex h-full flex-col">
         <form action="{{ route('saveAnswer') }}" class="flex flex-col justify-between h-full">
             @csrf
@@ -51,7 +50,4 @@
             </div>
         </form>
     </div>
-
-
-
 </x-app-layout>

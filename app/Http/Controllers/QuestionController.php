@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Answer;
 use App\Models\Question;
+use App\Models\Topic;
 use Illuminate\Http\Request;
 use League\Csv\Reader;
 
@@ -22,7 +23,10 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        return view('question.create');
+        $topics = Topic::all();
+        return view('question.create', [
+            'topics' => $topics,
+        ]);
     }
 
     /**
