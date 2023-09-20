@@ -16,6 +16,11 @@ class Topic extends Model
         return $this->hasMany(TopicProgress::class);
     }
 
+    public function userResponses()
+    {
+        return $this->hasMany(userResponse::class);
+    }
+
     public function questions()
     {
         return $this->hasMany(Question::class);

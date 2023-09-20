@@ -9,11 +9,16 @@ class UserResponse extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id', 'user_id', 'question_id', 'answer_id', 'response', 'isCorrect'];
+    protected $fillable = ['id', 'user_id','topic_id', 'question_id', 'answer_id', 'response', 'isCorrect'];
 
     public function question()
     {
         return $this->belongsTo(Question::class);
+    }
+
+    public function topic()
+    {
+        return $this->belongsTo(Topic::class);
     }
 
     public function user()
