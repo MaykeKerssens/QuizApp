@@ -29,6 +29,7 @@ class QuestionController extends Controller
         ]);
     }
 
+
     /**
      * Store a newly created resource in storage.
      */
@@ -36,9 +37,64 @@ class QuestionController extends Controller
     {
         // TODO: Fix fileupload validation to check for correct filetype
         $request->validate([
-            'question_file' => 'required|file',
+            'question_file' => 'file',
             // |mimetypes:text/csv,application/json
-            // mimes:json,csv
+            // |mimes:json,csv
+            'topic' => 'required|filled',
+            'question_text' => 'required_unless:question_file,null|string',
+            'question_point_worth' => 'nullable|numeric',
+            'question_type' => 'required_unless:question_file,null',
+            'answer_a_text' => 'nullable|string',
+            'answer_a_isCorrect' => 'nullable|boolean',
+            'answer_b_text' => 'nullable|string',
+            'answer_b_isCorrect' => 'nullable|boolean',
+            'answer_c_text' => 'nullable|string',
+            'answer_c_isCorrect' => 'nullable|boolean',
+            'question_correct_answer' => 'nullable|string',
+        ],[
+            'question_file.file' => 'The question file must be a valid file.',
+            'topic.required' => 'The topic field is required.',
+            'topic.filled' => 'The topic field must be filled.',
+            'question_text.required_unless' => 'The question text field is required unless a question file is provided.',
+            'question_text.string' => 'The question text must be a valid string.',
+            'question_point_worth.numeric' => 'The question point worth must be a numeric value.',
+            'question_type.required_unless' => 'The question type field is required unless a question file is provided.',
+            'answer_a_text.string' => 'Answer A must be a valid string.',
+            'answer_a_isCorrect.boolean' => 'Answer A isCorrect must be a valid boolean value.',
+            'answer_b_text.string' => 'Answer B must be a valid string.',
+            'answer_b_isCorrect.boolean' => 'Answer B isCorrect must be a valid boolean value.',
+            'answer_c_text.string' => 'Answer C must be a valid string.',
+            'answer_c_isCorrect.boolean' => 'Answer C isCorrect must be a valid boolean value.',
+            'question_correct_answer.string' => 'The correct answer must be a valid string.',
+        ]);
+
+
+        if($request->question_file) {
+            dd('this is a file');
+            return $this->storeFile($request);
+        }
+        // Redirect back with a success message
+        dd('this worked??');
+        return redirect()->back()->with('success', 'Question "question info" uploaded succesfully');
+    }
+
+
+
+    /**
+     * Store files uploaded by users
+     */
+    public function storeFile(Request $request)
+    {
+        // TODO: Fix fileupload validation to check for correct filetype
+        $request->validate([
+            'question_file' => 'file',
+            // |mimetypes:text/csv,application/json
+            // |mimes:json,csv
+            'topic' => 'required|filled',
+        ],[
+            'question_file.file' => 'The question file must be a valid file.',
+            'topic.required' => 'The topic field is required.',
+            'topic.filled' => 'The topic field must be filled.',
         ]);
 
         $file = $request->file('question_file');
@@ -73,10 +129,10 @@ class QuestionController extends Controller
                 'text' => $row['answer_c'],
                 'isCorrect' => ($row['correct_answer'] == 'c' || $row['correct_answer'] == 'C'),
             ]);
-        }
 
-        // Redirect back with a success message
-        return redirect()->back()->with('success', 'Questions uploaded successfully');
+
+            return redirect()->back()->with('success', 'File uploaded successfully');
+        }
     }
 
     /**

@@ -24,7 +24,7 @@
                 <input type="file" name="question_file">
 
 
-                <!-- Create questions -->
+                <!-- Manually add questions -->
                 <p class="text-purple-900 font-bold text-lg">Enter question:</p>
                 <input type="text" name="question_text">
 
@@ -65,33 +65,38 @@
                 <!-- Multiple choice questions -->
                 <div id="multipleChoiceFields" style="display: none">
                     <p class="text-purple-900 font-bold text-lg">Enter answer A:</p>
-                    <input type="text" name="answer_a">
+                    <input type="text" name="answer_a_text">
                     <input type="checkbox" name="answer_a_isCorrect">
 
                     <p class="text-purple-900 font-bold text-lg">Enter answer B:</p>
-                    <input type="text" name="answer_b">
+                    <input type="text" name="answer_b_text">
                     <input type="checkbox" name="answer_b_isCorrect">
 
                     <p class="text-purple-900 font-bold text-lg">Enter answer C:</p>
-                    <input type="text" name="answer_c">
+                    <input type="text" name="answer_c_text">
                     <input type="checkbox" name="answer_c_isCorrect">
                 </div>
 
                 <!-- Open Answer question -->
                 <div id="openAnswerFields" style="display: none">
                     <p class="text-purple-900 font-bold text-lg">Enter correct answer:</p>
-                    <input type="text" name="question_text">
+                    <input type="text" name="question_correct_answer">
                 </div>
 
             </div>
         </div>
 
+        <div class="bg-gray-100 rounded-lg gap-y-2 px-6 py-2">
+            <p class="text-purple-900 font-bold  text-lg">Feedback:</p>
+            <p>{{ $errors }}</p>
+            {{-- //TODO: Add feedback after adding questions --}}
+        </div>
 
         <div> <!-- submit button -->
-            <x-primary-button><a href="{{ route('dashboard') }}">Terug naar overzicht</a></x-primary-button>
+            <x-primary-button><a href="{{ route('dashboard') }}">Add questions</a></x-primary-button>
         </div>
     </form>
     </div>
 
-    {{-- //TODO: Add feedback after adding questions --}}
+
 </x-app-layout>
