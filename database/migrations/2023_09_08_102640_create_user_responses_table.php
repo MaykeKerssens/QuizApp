@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('user_responses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users');
+            $table->foreignId('topic_id')->references('id')->on('topics');
             $table->foreignId('question_id')->references('id')->on('questions');
             $table->foreignId('answer_id')->nullable()->references('id')->on('answers');
             $table->string('response')->nullable();

@@ -10,26 +10,27 @@ use Illuminate\Http\Request;
 
 class PagesController extends Controller
 {
-    public function dashboard(){
+    public function dashboard()
+    {
 
         $topics = Topic::all();
-        return view('dashboard',[
+        return view('dashboard', [
             'topics' => $topics
         ]);
     }
 
-        /**
+    /**
      * Display the specified resource.
      */
     public function quiz(string $id)
     {
         $topic = Topic::find($id);
-        $questions = Question::where('topic_id', $id)->orderBy('id','ASC')->get();
+        $questions = Question::where('topic_id', $id)->orderBy('id', 'ASC')->get();
         $question = $questions[0];
-        $answers = Answer::where('question_id', $question->id)->orderBy('id','ASC')->get();
+        $answers = Answer::where('question_id', $question->id)->orderBy('id', 'ASC')->get();
         $questionsAmount = count($questions);
 
-        return view('quiz',[
+        return view('quiz', [
             'topic' => $topic,
             'question' => $question,
             'answers' => $answers,
@@ -47,36 +48,45 @@ class PagesController extends Controller
         // save answer here:
         UserResponse::updateOrCreate([
             'user_id' => auth()->user()->id,
+            'topic_id' => $currentQuestion->topic_id,
             'question_id' => $currentQuestion->id,
             'answer_id' => ($currentQuestion->type == 'multipleChoice') ? $selectedAnswer->id : null,
             'response' => ($currentQuestion->type == 'openAnswer') ? $request->response : null,
             'isCorrect' => ($selectedAnswer->isCorrect == true),
         ]);
 
-        // Go to next question
-        $questions = Question::where('topic_id', $currentQuestion->topic_id)->orderBy('id','ASC')->get();
+        $questions = Question::where('topic_id', $currentQuestion->topic_id)->orderBy('id', 'ASC')->get();
 
         // check if there are more questions, otherwise end quiz
-        if($request->counter < ($request->questionsAmount -1)){
+        if ($request->counter < ($request->questionsAmount - 1)) {
             $counter =  $request->counter + 1;
             $newQuestion = $questions[$counter];
-            $answers = Answer::where('question_id', $newQuestion->id)->orderBy('id','ASC')->get();
+            $answers = Answer::where('question_id', $newQuestion->id)->orderBy('id', 'ASC')->get();
 
-            return view('quiz',[
+            return view('quiz', [
                 'question' => $newQuestion,
                 'answers' => $answers,
                 'questionsAmount' => $request->questionsAmount,
                 'counter' => $counter,
             ]);
+        } else {
+            return $this->showResults($currentQuestion->topic->id);
         }
-        else{
-            dd('einde quiz');
-            // return view('quiz',[
-            //     'question' => $newQuestion,
-            //     'answers' => $answers,
-            //     'questionsAmount' => $request->questionsAmount,
-            //     'counter' => $counter,
-            // ]);
-        }
+    }
+
+
+    public function showResults(string $topic_id){
+
+        $userAnswers = UserResponse::where('topic_id', $topic_id)->where('user_id', auth()->user()->id) ->orderBy('question_id', 'ASC')->get();
+        $questions = Question::where('topic_id', $topic_id)->orderBy('id', 'ASC')->get();
+        $questionsAmount = count($questions);
+        $topic = Topic::where('id', $topic_id)->orderBy('id', 'ASC')->get()[0];
+
+        return view('results', [
+            'userAnswers' => $userAnswers,
+            'questions' => $questions,
+            'questionsAmount' => $questionsAmount,
+            'topic' => $topic,
+        ]);
     }
 }
