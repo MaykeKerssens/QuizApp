@@ -55,7 +55,6 @@ class PagesController extends Controller
             'isCorrect' => ($selectedAnswer->isCorrect == true),
         ]);
 
-        // Go to next question
         $questions = Question::where('topic_id', $currentQuestion->topic_id)->orderBy('id', 'ASC')->get();
 
         // check if there are more questions, otherwise end quiz
@@ -71,11 +70,7 @@ class PagesController extends Controller
                 'counter' => $counter,
             ]);
         } else {
-            // TODO: rederict to showResults function
-            // return view('results', [
-            //     'questions' => $questions,
-            //     'topic_name' => $currentQuestion->topic->name,
-            // ]);
+            return $this->showResults($currentQuestion->topic->id);
         }
     }
 
