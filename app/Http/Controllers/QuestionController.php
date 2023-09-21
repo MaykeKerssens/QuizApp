@@ -15,7 +15,12 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        //
+        $questions = Question::orderBy('topic_id', 'ASC')->get();
+        $answers = Answer::orderBy('id', 'ASC')->get();
+        return view('question.index', [
+            'questions' => $questions,
+            'answers' => $answers,
+        ]);
     }
 
     /**

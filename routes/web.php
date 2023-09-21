@@ -26,7 +26,6 @@ Route::get('saveAnswer', [PagesController::class, 'storeUserAnswer'])->middlewar
 Route::get('results/{id}', [PagesController::class, 'showResults'])->middleware(['auth', 'verified'])->name('results');
 
 Route::resource('question', QuestionController::class);
-// Route::get('question', [PagesController::class, 'storeFile'])->middleware(['auth', 'verified'])->name('storeFile');
 
 
 Route::middleware('auth')->group(function () {
