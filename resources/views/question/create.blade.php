@@ -19,69 +19,49 @@
                     @endforeach
                 </select>
 
+                <!-- Add questions by uploading a file -->
                 <p class="text-purple-900 font-bold text-lg">Select a file with questions:</p>
-                <input type="file" name="question_file">
+                <input type="file" name="question_file" id="question_file" onchange="hideOtherFields()">
 
 
                 <!-- Manually add questions -->
-                <p class="text-purple-900 font-bold text-lg">Enter question:</p>
-                <input type="text" name="question_text">
+                <div id="addQuestionFields" style="display: block">
+                    <p class="text-purple-900 font-bold text-lg">Enter question:</p>
+                    <input type="text" name="question_text">
 
-                <p class="text-purple-900 font-bold text-lg">Set pointworth:</p>
-                <input type="number" name="question_point_worth">
+                    <p class="text-purple-900 font-bold text-lg">Set pointworth:</p>
+                    <input type="number" name="question_point_worth">
 
-                <p class="text-purple-900 font-bold text-lg">Choose question type:</p>
-                <select name="question_type" id="question_type" onchange="toggleFields()">
-                    <option value="">Question types</option>
-                    <option value="multipleChoice">Multiple choice</option>
-                    <option value="openAnswer">Open answer</option>
-                </select>
+                    <p class="text-purple-900 font-bold text-lg">Choose question type:</p>
+                    <select name="question_type" id="question_type" onchange="toggleFields()">
+                        <option value="">Question types</option>
+                        <option value="multipleChoice">Multiple choice</option>
+                        <option value="openAnswer">Open answer</option>
+                    </select>
 
-                {{-- //TODO: Add hint field? --}}
+                    {{-- //TODO: Add hint field? --}}
 
+                    <!-- Multiple choice questions -->
+                    <div id="multipleChoiceFields" style="display: none">
+                        <p class="text-purple-900 font-bold text-lg">Enter answer A:</p>
+                        <input type="text" name="answer_a_text">
+                        <input type="checkbox" name="answer_a_isCorrect">
 
-                <!-- Script for toggling MultipleChoice and OpenAnswer fields -->
-                <script>
-                    function toggleFields() {
-                        var selectedOption = document.getElementById('question_type').value;
-                        var multipleChoiceFields = document.getElementById('multipleChoiceFields');
-                        var openAnswerFields = document.getElementById('openAnswerFields');
+                        <p class="text-purple-900 font-bold text-lg">Enter answer B:</p>
+                        <input type="text" name="answer_b_text">
+                        <input type="checkbox" name="answer_b_isCorrect">
 
-                        if (selectedOption === 'multipleChoice') {
-                            multipleChoiceFields.style.display = 'block';
-                            openAnswerFields.style.display = 'none';
-                        } else if (selectedOption === 'openAnswer') {
-                            multipleChoiceFields.style.display = 'none';
-                            openAnswerFields.style.display = 'block';
-                        } else {
-                            // Handle other cases if needed
-                            multipleChoiceFields.style.display = 'none';
-                            openAnswerFields.style.display = 'none';
-                        }
-                    }
-                </script>
+                        <p class="text-purple-900 font-bold text-lg">Enter answer C:</p>
+                        <input type="text" name="answer_c_text">
+                        <input type="checkbox" name="answer_c_isCorrect">
+                    </div>
 
-                <!-- Multiple choice questions -->
-                <div id="multipleChoiceFields" style="display: none">
-                    <p class="text-purple-900 font-bold text-lg">Enter answer A:</p>
-                    <input type="text" name="answer_a_text">
-                    <input type="checkbox" name="answer_a_isCorrect">
-
-                    <p class="text-purple-900 font-bold text-lg">Enter answer B:</p>
-                    <input type="text" name="answer_b_text">
-                    <input type="checkbox" name="answer_b_isCorrect">
-
-                    <p class="text-purple-900 font-bold text-lg">Enter answer C:</p>
-                    <input type="text" name="answer_c_text">
-                    <input type="checkbox" name="answer_c_isCorrect">
+                    <!-- Open Answer question -->
+                    <div id="openAnswerFields" style="display: none">
+                        <p class="text-purple-900 font-bold text-lg">Enter correct answer:</p>
+                        <input type="text" name="question_correct_answer">
+                    </div>
                 </div>
-
-                <!-- Open Answer question -->
-                <div id="openAnswerFields" style="display: none">
-                    <p class="text-purple-900 font-bold text-lg">Enter correct answer:</p>
-                    <input type="text" name="question_correct_answer">
-                </div>
-
             </div>
         </div>
 
@@ -101,3 +81,40 @@
     </form>
     </div>
 </x-app-layout>
+
+
+<script>
+    // Function for toggling MultipleChoice and OpenAnswer fields
+    function toggleFields() {
+        var selectedOption = document.getElementById('question_type').value;
+        var multipleChoiceFields = document.getElementById('multipleChoiceFields');
+        var openAnswerFields = document.getElementById('openAnswerFields');
+
+        if (selectedOption === 'multipleChoice') {
+            multipleChoiceFields.style.display = 'block';
+            openAnswerFields.style.display = 'none';
+        } else if (selectedOption === 'openAnswer') {
+            multipleChoiceFields.style.display = 'none';
+            openAnswerFields.style.display = 'block';
+        } else {
+            // Handle other cases if needed
+            multipleChoiceFields.style.display = 'none';
+            openAnswerFields.style.display = 'none';
+        }
+    }
+
+    // Function for hiding the other fields when a file is uploaded
+    function hideOtherFields(){
+        var questionFileStatus = document.getElementById('question_file');
+        var addQuestionFields = document.getElementById('addQuestionFields');
+
+        // Check if a file is uploaded
+        if (questionFileStatus.files.length > 0) {
+            addQuestionFields.style.display = 'none';
+        }
+        else{
+            addQuestionFields.style.display = 'block';
+        }
+    }
+</script>
+

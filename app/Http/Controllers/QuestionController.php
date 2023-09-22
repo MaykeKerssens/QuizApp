@@ -47,9 +47,11 @@ class QuestionController extends Controller
             // |mimetypes:text/csv,application/json
             // |mimes:json,csv
             'selected_topic' => 'required|filled',
-            'question_text' => 'required_unless:question_file,null|string',
+            // 'question_text' => 'required_unless:question_file,null|string',
+            'question_text' => 'nullable|string',
             'question_point_worth' => 'nullable|numeric',
-            'question_type' => 'required_unless:question_file,null',
+            // 'question_type' => 'required_unless:question_file,null',
+            'question_type' => 'nullable',
             'answer_a_text' => 'nullable|string',
             'answer_a_isCorrect' => 'nullable',
             'answer_b_text' => 'nullable|string',
