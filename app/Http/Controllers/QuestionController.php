@@ -80,7 +80,7 @@ class QuestionController extends Controller
             $question = Question::updateOrCreate([
                 'topic_id' => $topic->id,
                 'text' => $request->question_text,
-                'type' => "multipleChoice",
+                'type' => $request->question_type,
                 // 'hint' => $request->hint,
                 'point_worth' => $request->question_point_worth ? $request->question_point_worth : 1,
             ]);
@@ -200,6 +200,22 @@ class QuestionController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $question = Question::find($id);
+
+        if (!$question) {
+            return redirect()->route('questions.index')->with('error', 'Question not found');
+        }
+
+        if($question->type == "multipleChoice"){
+            $answers = Answer::where('question_id', $question->id)->get();
+            foreach($answers as $answer){
+                $answer->delete();
+            }
+
+        }
+        $questionText = $question->text;
+        $question->delete();
+
+        return redirect()->route('questions.index')->with('success', "Question '$questionText' deleted successfully");
     }
 }

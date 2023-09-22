@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="pt-6 mx-6 flex h-full flex-col">
-    <form action="{{ route('question.store') }}" method="POST" enctype="multipart/form-data" class="flex flex-col justify-between h-full">
+    <form action="{{ route('questions.store') }}" method="POST" enctype="multipart/form-data" class="flex flex-col justify-between h-full">
         @csrf
 
         <div> <!-- Everything -->
@@ -93,7 +93,6 @@
                     {{ session('success') }}
                 </div>
             @endif
-            {{-- //TODO: Add feedback after adding questions --}}
         </div>
 
         <div> <!-- submit button -->

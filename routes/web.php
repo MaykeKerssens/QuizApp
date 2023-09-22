@@ -25,7 +25,7 @@ Route::get('quiz/{id}', [PagesController::class, 'quiz'])->middleware(['auth', '
 Route::get('saveAnswer', [PagesController::class, 'storeUserAnswer'])->middleware(['auth', 'verified'])->name('saveAnswer');
 Route::get('results/{id}', [PagesController::class, 'showResults'])->middleware(['auth', 'verified'])->name('results');
 
-Route::resource('question', QuestionController::class);
+Route::resource('questions', QuestionController::class);
 
 
 Route::middleware('auth')->group(function () {
