@@ -24,7 +24,9 @@ Route::get('/dashboard', [PagesController::class, 'dashboard'])->middleware(['au
 Route::get('quiz/{id}', [PagesController::class, 'quiz'])->middleware(['auth', 'verified'])->name('quiz');
 Route::get('saveAnswer', [PagesController::class, 'storeUserAnswer'])->middleware(['auth', 'verified'])->name('saveAnswer');
 Route::get('results/{id}', [PagesController::class, 'showResults'])->middleware(['auth', 'verified'])->name('results');
-// Route::view('/results', 'results')->middleware(['auth', 'verified'])->name('results');
+
+Route::resource('questions', QuestionController::class);
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -32,6 +34,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::resource('question', QuestionController::class);
+
 
 require __DIR__.'/auth.php';
