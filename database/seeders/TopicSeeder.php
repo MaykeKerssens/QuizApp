@@ -14,7 +14,7 @@ class TopicSeeder extends Seeder
     public function run(): void
     {
         Topic::create([
-            'name' => 'Functionalities demonstration',
+            'name' => 'Demonstration',
         ]);
 
         Topic::create([
