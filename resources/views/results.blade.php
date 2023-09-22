@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="pt-6 mx-6 flex h-full flex-col">
-        <form action="{{ route('saveAnswer') }}" class="flex flex-col justify-between h-full">
+        <div class="flex flex-col justify-between h-full">
             @csrf
             <div> <!-- everything -->
                 <div class="text-gray-100 text-3xl mb-4 border-b border-gray-100 flex justify-between">
@@ -15,24 +15,30 @@
                     @endphp
                     @for ($i = 0; $i < $questionsAmount; $i++)
                         <div class="p-2">
-                            <p class="text-purple-900 font-bold  text-lg">{{ $i + 1 }}. {{ $questions[$i]->text }}
-                            </p>
+                            <p class="text-purple-900 font-bold  text-lg">{{ $i + 1 }}. {{ $questions[$i]->text }}</p>
 
-                            <!-- Show if user answer is corrct-->
-                            @if ($userAnswers[$i]->isCorrect == true)
-                                <p class="text-green-500">{{ $userAnswers[$i]->answer->text }}
-                                    (+{{ $questions[$i]->point_worth }})</p>
+                            <!-- Show if user answer is corrct or false-->
+                            @if ($userResponses[$i]->isCorrect == true)
+                                <p class="text-green-500">
+                                    {{($questions[$i]->type == "multipleChoice") ? $userResponses[$i]->answer->text : $userResponses[$i]->response }}
+                                    (+{{ $questions[$i]->point_worth }})
+                                </p>
                                 @php
                                     $correctAnswers += 1;
                                     $totalPoints += $questions[$i]->point_worth;
                                 @endphp
                             @else
-                                <p class="text-red-500">{{ $userAnswers[$i]->answer->text }}</p>
-                                @foreach ($questions[$i]->answers as $answer)
-                                    @if ($answer->isCorrect)
-                                        <p class="text-green-500">{{ $answer->text }}</p>
-                                    @endif
-                                @endforeach
+                                <p class="text-red-500">{{($questions[$i]->type == "multipleChoice") ? $userResponses[$i]->answer->text : $userResponses[$i]->response }}</p>
+                                @if ($questions[$i]->type == "multipleChoice")
+                                    @foreach ($questions[$i]->answers as $answer)
+                                        @if ($answer->isCorrect)
+                                            <p class="text-green-500">{{ $answer->text }}</p>
+                                        @endif
+                                    @endforeach
+                                @else
+                                    <p class="text-green-500">{{ $questions[$i]->correct_answer }}</p>
+                                @endif
+
                             @endif
                         </div>
                     @endfor
@@ -48,6 +54,6 @@
             <div> <!-- submit button -->
                 <x-primary-button><a href="{{ route('dashboard') }}">Terug naar overzicht</a></x-primary-button>
             </div>
-        </form>
+        </div>
     </div>
 </x-app-layout>

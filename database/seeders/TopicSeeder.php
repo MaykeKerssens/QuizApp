@@ -14,11 +14,15 @@ class TopicSeeder extends Seeder
     public function run(): void
     {
         Topic::create([
-            'name' => 'Random',
+            'name' => 'Demonstration',
         ]);
 
         Topic::create([
-            'name' => 'Geschiedenis',
+            'name' => 'Trivia',
+        ]);
+
+        Topic::create([
+            'name' => 'History',
         ]);
     }
 }

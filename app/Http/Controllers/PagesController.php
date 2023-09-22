@@ -43,7 +43,16 @@ class PagesController extends Controller
     public function storeUserAnswer(Request $request)
     {
         $currentQuestion = Question::find($request->question_id);
-        $selectedAnswer = Answer::where('id', $request->selected_answer_id)->get()[0];
+        $isCorrect = true;
+        $selectedAnswer = null;
+
+        if($currentQuestion->type == 'multipleChoice'){
+            $selectedAnswer = Answer::where('id', $request->selected_answer_id)->first();
+            $isCorrect = $selectedAnswer->isCorrect;
+        }
+        else{
+            $isCorrect = (strtolower($request->response) == strtolower($currentQuestion->correct_answer));
+        }
 
         // save answer here:
         UserResponse::updateOrCreate([
@@ -52,7 +61,7 @@ class PagesController extends Controller
             'question_id' => $currentQuestion->id,
             'answer_id' => ($currentQuestion->type == 'multipleChoice') ? $selectedAnswer->id : null,
             'response' => ($currentQuestion->type == 'openAnswer') ? $request->response : null,
-            'isCorrect' => ($selectedAnswer->isCorrect == true),
+            'isCorrect' => $isCorrect,
         ]);
 
         $questions = Question::where('topic_id', $currentQuestion->topic_id)->orderBy('id', 'ASC')->get();
@@ -77,13 +86,13 @@ class PagesController extends Controller
 
     public function showResults(string $topic_id){
 
-        $userAnswers = UserResponse::where('topic_id', $topic_id)->where('user_id', auth()->user()->id) ->orderBy('question_id', 'ASC')->get();
+        $userResponses = UserResponse::where('topic_id', $topic_id)->where('user_id', auth()->user()->id) ->orderBy('question_id', 'ASC')->get();
         $questions = Question::where('topic_id', $topic_id)->orderBy('id', 'ASC')->get();
         $questionsAmount = count($questions);
         $topic = Topic::where('id', $topic_id)->orderBy('id', 'ASC')->get()[0];
 
         return view('results', [
-            'userAnswers' => $userAnswers,
+            'userResponses' => $userResponses,
             'questions' => $questions,
             'questionsAmount' => $questionsAmount,
             'topic' => $topic,
