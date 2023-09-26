@@ -98,4 +98,15 @@ class PagesController extends Controller
             'topic' => $topic,
         ]);
     }
+
+
+    public function userAnswers()
+    {
+        $questions = Question::orderBy('topic_id', 'ASC')->get();
+        $answers = Answer::orderBy('id', 'ASC')->get();
+        return view('question.user-answers', [
+            'questions' => $questions,
+            'answers' => $answers,
+        ]);
+    }
 }

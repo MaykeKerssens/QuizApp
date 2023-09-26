@@ -23,9 +23,11 @@ Route::get('/', function () {
 Route::get('/dashboard', [PagesController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('quiz/{id}', [PagesController::class, 'quiz'])->middleware(['auth', 'verified'])->name('quiz');
 Route::get('storeUserAnswer', [PagesController::class, 'storeUserAnswer'])->middleware(['auth', 'verified'])->name('storeUserAnswer');
+
 Route::get('results/{id}', [PagesController::class, 'showResults'])->middleware(['auth', 'verified'])->name('results');
 
 Route::resource('questions', QuestionController::class);
+Route::get('userAnswers', [PagesController::class, 'userAnswers'])->middleware(['auth', 'verified'])->name('userAnswers');
 
 
 Route::middleware('auth')->group(function () {
