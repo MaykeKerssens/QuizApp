@@ -10,50 +10,47 @@
                 </div>
 
                 <div class="max-h-96 overflow-y-auto rounded-lg">
-                    <table class="bg-gray-100 rounded-lg table table-auto ">
+                    <table class="bg-gray-100 rounded-lg table-fixed min-w-full">
                         <thead>
-                            <tr class="rounded-t-lg bg-yellow-400 min-w-full">
-                                <td class="rounded-tl-lg">Question</td>
-                                <td>Topic</td>
-                                <td>Pointworth</td>
-                                <td>Type</td>
-                                <td>Correct answer</td>
-                                <td>Answer A</td>
-                                <td>Answer B</td>
-                                <td>Answer C</td>
-                                <td class="rounded-tr-lg">Delete</td>
+                            <tr class="rounded-t-lg bg-yellow-400">
+                                <td class="rounded-tl-lg border-x-2 border-yellow-500">Topic</td>
+                                <td class=" border-x-2 border-yellow-500">Question</td>
+                                <td class="border-x-2 border-yellow-500">Correct answer</td>
+                                <td class="rounded-tr-lg border-x-2 border-yellow-500">Times correct</td>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($questions as $question)
-                                <tr class="px-6 border-2 border-gray-300">
-                                    <td class="border-2 border-gray-300">{{ $question->text }}</td>
+                                <tr class="px-6 border-2 border-gray-300 bg-gray-200 ">
                                     <td class="border-2 border-gray-300">{{ $question->topic->name }}</td>
-                                    <td class="border-2 border-gray-300">{{ $question->point_worth }}</td>
-                                    <td class="border-2 border-gray-300">{{ $question->type }}</td>
-                                    <td class="border-2 border-gray-300">
-                                        {{ $question->correct_answer ? $question->correct_answer : '-' }}</td>
+                                    <td class="border-2 border-gray-300 text-bold">{{ $question->text }}</td>
+
                                     @if ($question->type == 'multipleChoice')
                                         @foreach ($answers as $answer)
-                                            @if ($answer->question_id == $question->id)
-                                                <td class="border-2 border-gray-300">{{ $answer->text }}
-                                                    {{ $answer->isCorrect ? '(correct)' : '' }}</td>
+                                            @if ($answer->question_id == $question->id && $answer->isCorrect)
+                                                <td class="border-2 border-gray-300">{{ $answer->text }}</td>
                                             @endif
                                         @endforeach
                                     @else
-                                        <td class="border-2 border-gray-300">-</td>
-                                        <td class="border-2 border-gray-300">-</td>
-                                        <td class="border-2 border-gray-300">-</td>
+                                        <td class="border-2 border-gray-300">{{ $question->correct_answer }}</td>
                                     @endif
-                                    <td>
-                                        <form method="POST" action="{{ route('questions.destroy', $question->id) }}">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-500 border-2 border-red-500 p-1">Delete question</button>
-                                        </form>
-                                    </td>
-
                                 </tr>
+                                <!-- User answers-->
+                                @foreach ($userResponses as $userResponse)
+                                    <tr>
+                                        <td class="border-2 border-gray-300">{{ $userResponse->user->name }}</td>
+
+                                        @if ($userResponse->isCorrect == true)
+                                            <td class="border-2 border-gray-300 text-green-500">{{ $userResponse->response ? $question->correct_answer : $userResponse->answer->text }}</td>
+                                        @else
+                                            <td class="border-2 border-gray-300 text-red-500">{{ $userResponse->response ? $question->correct_answer :  $userResponse->answer->text }}</td>
+                                        @endif
+                                        @if ($question->type == 'multipleChoice')
+
+                                        @else
+                                        @endif
+                                    </tr>
+                                @endforeach
                             @endforeach
                         </tbody>
                     </table>
@@ -62,7 +59,7 @@
                 <div class="bg-gray-100 rounded-lg gap-y-2 px-6 py-2 mt-2">
                     <p class="text-purple-900 font-bold text-lg">Feedback:</p>
                     <p>{{ $errors }}</p>
-                    @if(session('success'))
+                    @if (session('success'))
                         <div class="">
                             {{ session('success') }}
                         </div>
