@@ -114,7 +114,6 @@ class QuestionController extends Controller
             // Redirect back with a success message
             return redirect()->back()->with('success', 'Question added successfully');
         }
-
     }
 
 
@@ -147,7 +146,6 @@ class QuestionController extends Controller
         foreach ($csv as $row) {
 
             $question = Question::updateOrCreate([
-                'id' => $row['id'],
                 'topic_id' => $topic->id,
                 'text' => $row['question'],
                 'type' => "multipleChoice",
@@ -168,9 +166,9 @@ class QuestionController extends Controller
                 'text' => $row['answer_c'],
                 'isCorrect' => ($row['correct_answer'] == 'c' || $row['correct_answer'] == 'C'),
             ]);
-
-            return redirect()->back()->with('success', 'File uploaded successfully');
         }
+
+        return redirect()->back()->with('success', 'File uploaded successfully');
     }
 
     /**
