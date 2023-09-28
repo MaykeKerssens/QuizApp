@@ -22,7 +22,7 @@ class Question extends Model
         return $this->belongsTo(Topic::class);
     }
 
-    public function userResponse()
+    public function userResponses()
     {
         return $this->hasMany(UserResponse::class);
     }

@@ -13,37 +13,35 @@
                     <table class="bg-gray-100 rounded-lg table-fixed min-w-full">
                         <thead>
                             <tr class="rounded-t-lg bg-yellow-400">
-                                <td class="rounded-tl-lg border-x-2 border-yellow-500">Topic</td>
-                                <td class=" border-x-2 border-yellow-500">Question</td>
-                                <td class="border-x-2 border-yellow-500">Correct answer</td>
-                                <td class="rounded-tr-lg border-x-2 border-yellow-500">Times correct</td>
+                                <td class="rounded-tl-lg border-x-2 border-yellow-500">Question / student </td>
+                                <td class="rounded-tr-lg border-x-2 border-yellow-500">Answer</td>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($questions as $question)
-                                <tr class="px-6 border-2 border-gray-300 bg-gray-200 ">
-                                    <td class="border-2 border-gray-300">{{ $question->topic->name }}</td>
-                                    <td class="border-2 border-gray-300 text-bold">{{ $question->text }}</td>
+                                <tr class="px-6 border-2 border-gray-300 bg-gray-300">
+                                    <td class="border-2 border-gray-200 text-bold">{{ $question->text }}</td>
 
                                     @if ($question->type == 'multipleChoice')
-                                        @foreach ($answers as $answer)
-                                            @if ($answer->question_id == $question->id && $answer->isCorrect)
-                                                <td class="border-2 border-gray-300">{{ $answer->text }}</td>
+                                        @foreach ($question->answers as $answer)
+                                            @if ($answer->isCorrect)
+                                                <td class="border-2 border-gray-200">{{ $answer->text }}</td>
                                             @endif
                                         @endforeach
                                     @else
-                                        <td class="border-2 border-gray-300">{{ $question->correct_answer }}</td>
+                                        <td class="border-2 border-gray-200">{{ $question->correct_answer }}</td>
                                     @endif
                                 </tr>
+
                                 <!-- User answers-->
-                                @foreach ($userResponses as $userResponse)
+                                @foreach ($question->userResponses as $userResponse)
                                     <tr>
-                                        <td class="border-2 border-gray-300">{{ $userResponse->user->name }}</td>
+                                        <td class="border-2 border-gray-200">{{ $userResponse->user->name }}</td>
 
                                         @if ($userResponse->isCorrect == true)
-                                            <td class="border-2 border-gray-300 text-green-500">{{ $userResponse->response ? $question->correct_answer : $userResponse->answer->text }}</td>
+                                            <td class="border-2 border-gray-200 text-green-500">{{ $userResponse->response ? $question->correct_answer : $userResponse->answer->text }}</td>
                                         @else
-                                            <td class="border-2 border-gray-300 text-red-500">{{ $userResponse->response ? $question->correct_answer :  $userResponse->answer->text }}</td>
+                                            <td class="border-2 border-gray-200 text-red-500">{{ $userResponse->response ? $question->correct_answer :  $userResponse->answer->text }}</td>
                                         @endif
                                         @if ($question->type == 'multipleChoice')
 
@@ -51,6 +49,10 @@
                                         @endif
                                     </tr>
                                 @endforeach
+
+                                <tr> <!-- Empty row between each question-->
+                                    <td class="py-3"></td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>
