@@ -86,7 +86,7 @@ class PagesController extends Controller
 
     public function showResults(string $topic_id){
 
-        $userResponses = UserResponse::where('topic_id', $topic_id)->where('user_id', auth()->user()->id) ->orderBy('question_id', 'ASC')->get();
+        $userResponses = UserResponse::where('topic_id', $topic_id)->where('user_id', auth()->user()->id)->orderBy('question_id', 'ASC')->get();
         $questions = Question::where('topic_id', $topic_id)->orderBy('id', 'ASC')->get();
         $questionsAmount = count($questions);
         $topic = Topic::where('id', $topic_id)->orderBy('id', 'ASC')->get()[0];
@@ -96,6 +96,19 @@ class PagesController extends Controller
             'questions' => $questions,
             'questionsAmount' => $questionsAmount,
             'topic' => $topic,
+        ]);
+    }
+
+
+    public function userAnswers()
+    {
+        $questions = Question::orderBy('topic_id', 'ASC')->get();
+        $userResponses = UserResponse::orderBy('topic_id', 'ASC')->orderBy('user_id', 'ASC')->get();
+        $answers = Answer::orderBy('id', 'ASC')->get();
+        return view('question.user-answers', [
+            'questions' => $questions,
+            'answers' => $answers,
+            'userResponses' => $userResponses
         ]);
     }
 }
